@@ -57,3 +57,15 @@ test('모바일에서 화면이 넘치지 않고 미션을 선택할 수 있다'
   await page.getByRole('button',{name:'교사 대시보드'}).click();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
+test('GitHub Pages용 독립 데모가 외부 자산 없이 시험 시작을 저장한다', async({page})=>{
+  const failures=[];page.on('pageerror', e=>failures.push(e.message));
+  await page.goto('http://127.0.0.1:4174');
+  await expect(page.getByRole('heading',{name:'오늘의 작은 도전, 나만의 주행으로.'})).toBeVisible();
+  await page.getByRole('button',{name:'교사 대시보드'}).click();
+  await page.getByRole('button',{name:'시험 시작',exact:true}).click();
+  await expect(page.getByText('시험 진행 중',{exact:true})).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('시험 진행 중',{exact:true})).toBeVisible();
+  expect(await page.locator('script[src], link[rel="stylesheet"]').count()).toBe(0);
+  expect(failures).toEqual([]);
+});
