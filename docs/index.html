@@ -60,5 +60,13 @@
 <body>
   <a href="#main" class="skip">본문으로 이동</a>
   <div id="app"></div>
+  <script>
+    // A branch-based static host may serve this development entry from /root.
+    // Vite injects its client during development; static hosting needs the built demo.
+    if (document.querySelector('script[src="/src/main.js"]') &&
+        !document.querySelector('script[src="/@vite/client"]')) {
+      window.location.replace(new URL('./docs/', window.location.href));
+    }
+  </script>
 </body>
 </html>

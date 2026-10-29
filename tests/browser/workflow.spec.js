@@ -69,3 +69,9 @@ test('GitHub Pages용 독립 데모가 외부 자산 없이 시험 시작을 저
   expect(await page.locator('script[src], link[rel="stylesheet"]').count()).toBe(0);
   expect(failures).toEqual([]);
 });
+test('Pages가 루트 폴더를 게시해도 개발 진입점에서 완성된 데모로 연결한다', async({page})=>{
+  await page.goto('http://127.0.0.1:4175/');
+  await expect(page).toHaveURL('http://127.0.0.1:4175/docs/');
+  await expect(page.getByRole('heading',{name:'오늘의 작은 도전, 나만의 주행으로.'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'교사 대시보드'})).toBeVisible();
+});
